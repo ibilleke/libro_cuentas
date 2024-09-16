@@ -1,0 +1,31 @@
+{
+  "name": "libro-cuenta",
+  "version": "1.0.0",
+  "description": "Libro de cuentas (ingresos y egresos)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "migration": "ts-node src/db/migrations/index.ts",
+    "codegen": "npx kysely-codegen --dialect=mysql --out-file=./src/models/schema.ts"
+  },
+  "author": "Ignacio Billeke",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "kysely-codegen": "^0.16.6",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^5.0.0",
+    "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "kysely": "^0.27.4",
+    "mysql2": "^3.11.2"
+  }
+}
