@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
-import { newUser, searchUser, searchUserSelectAll, updateUser } from "../queries/AuthQuery"
-import { deleteToken, newToken, searchToken } from "../queries/TokenQuery"
+import { newUser, searchUser, searchUserSelectAll, updateUser } from "../db/queries/AuthQuery"
+import { deleteToken, newToken, searchToken } from "../db/queries/TokenQuery"
 import { checkPassword, hashPassword } from "../utils/auth"
 import { generateToken } from "../utils/token"
 import { generarJWT } from "../utils/jwt"
+import { NewToken, NewUser, UpdateUser, User } from "../types"
 
 export class AuthController {
     static createUSer = async (req: Request, res: Response) => {
@@ -15,7 +16,7 @@ export class AuthController {
                 return res.status(404).json({error: error.message})
             }
             req.body.password = await hashPassword(password) 
-            const data = {
+            const data: NewUser = {
                 name,
                 lastname,
                 email,
@@ -24,7 +25,7 @@ export class AuthController {
             const user = await newUser(data)
             const newId = user.insertId.toString().split('n')
             const token = generateToken()
-            const dataToken= {
+            const dataToken: NewToken = {
                 token,
                 user: +newId[0]
             }
@@ -62,7 +63,7 @@ export class AuthController {
                 return res.status(404).json({error: error.message})
             }
             if(!user.confirmed) {
-                const dataToken = {
+                const dataToken: NewToken = {
                     token: generateToken(),
                     user: user.id
                 }
@@ -76,8 +77,8 @@ export class AuthController {
                 const error = new Error("Contraseña incorrecta")
                 return res.status(404).json({error: error.message})
             }
-            const token = generarJWT({id: user.id})
-            res.send(token)
+            const tokenJWT = generarJWT({id: user.id})
+            res.send(tokenJWT)
         } catch (error) {
             res.status(500).json({error: "Hubo un error al ingresar a la cuenta"})
         }
@@ -91,7 +92,7 @@ export class AuthController {
                 const error = new Error("Correo electrónico no encontrado")
                 return res.status(404).json({error: error.message})
             }
-            const dataToken = {
+            const dataToken: NewToken = {
                 token: generateToken(),
                 user: user.id
             }
@@ -113,11 +114,11 @@ export class AuthController {
             }
             const { id } = await searchUser({id: validToken.user})
             req.body.password = await hashPassword(req.body.password)
-            const dataUser = {
+            const dataUser: UpdateUser = {
                 id,
                 password: req.body.password
             }
-            await updateUser(dataUser)
+            await Promise.allSettled([updateUser(dataUser), deleteToken(token)])
             res.send("Contraseña actualizada correctamente")
         } catch (error) {
             res.status(500).json({error: "Hubo un error al cambiar la contraseña"})

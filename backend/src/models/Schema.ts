@@ -14,16 +14,12 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export interface Categorys {
   id: Generated<number>;
   name: string;
-}
-
-export interface Classes {
-  id: Generated<number>;
-  name: string;
+  user: number;
 }
 
 export interface Finances {
   category: number;
-  class: number;
+  class: "expenditure" | "income";
   expenditure: Decimal | null;
   id: Generated<number>;
   income: Decimal | null;
@@ -50,7 +46,6 @@ export interface Users {
 
 export interface DB {
   categorys: Categorys;
-  classes: Classes;
   finances: Finances;
   tokens: Tokens;
   users: Users;
