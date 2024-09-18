@@ -1,5 +1,5 @@
-import { db } from "../config/db"
-import { NewUser, UpdateUser, User } from "../types"
+import { db } from "../../config/db"
+import { NewUser, UpdateUser, User } from "../../types"
 
 export async function newUser(user: NewUser) {
     return await db

@@ -1,5 +1,5 @@
-import { db } from "../config/db"
-import { NewToken, Token } from "../types"
+import { db } from "../../config/db"
+import { NewToken, Token } from "../../types"
 
 export async function newToken(token: NewToken) {
     await db

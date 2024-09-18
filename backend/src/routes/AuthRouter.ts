@@ -1,7 +1,7 @@
 import { Router } from "express"
+import { body, param } from "express-validator"
 import { AuthController } from "../controllers/AuthController"
 import { handleInputErrors } from "../middleware/validation"
-import { body, param } from "express-validator"
 
 const router = Router()
 
@@ -49,7 +49,7 @@ router.post("/forgot-password",
     AuthController.forgotPasword
 )
 
-router.post("/change-password-email/:token",
+router.put("/change-password-email/:token",
     param("token")
         .isLength({min: 6}).withMessage("Token no válido"),
     body("password")
