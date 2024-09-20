@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
-import { searchUser } from "../db/queries/AuthQuery"
+import { searchUserById } from "../db/queries/AuthQuery"
 import { User } from "../types"
 
 declare global {
@@ -21,7 +21,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if(typeof decoded === "object" && decoded.id) {
-            const user = await searchUser(decoded.id)
+            const user = await searchUserById(decoded.id)
             if(user) {
                 req.user = user
                 next()

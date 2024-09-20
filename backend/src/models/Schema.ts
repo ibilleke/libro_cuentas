@@ -12,33 +12,33 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 
 export interface Categorys {
-  id: Generated<number>;
+  id: string;
   name: string;
-  user: number;
+  user: string;
 }
 
 export interface Finances {
-  category: number;
+  category: string;
   class: "expenditure" | "income";
-  expenditure: Decimal | null;
-  id: Generated<number>;
-  income: Decimal | null;
+  expenditure: Generated<Decimal | null>;
+  id: string;
+  income: Generated<Decimal | null>;
   month: number;
   name: string;
-  user: number;
+  user: string;
   year: number;
 }
 
 export interface Tokens {
-  id: Generated<number>;
+  id: string;
   token: string;
-  user: number;
+  user: string;
 }
 
 export interface Users {
   confirmed: Generated<number | null>;
   email: string;
-  id: Generated<number>;
+  id: string;
   lastname: string | null;
   name: string;
   password: string;

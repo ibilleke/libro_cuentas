@@ -14,7 +14,7 @@ export async function validID(req: Request, res: Response, next: NextFunction) {
     try {
         const { categoryId } = req.params
         const { id: userId } = req.user
-        const category = await showCategoryById(userId, +categoryId)
+        const category = await showCategoryById(userId, categoryId)
         if(!category) {
             const error = new Error("Categoria no encontrada")
             return res.status(401).json({error: error.message})

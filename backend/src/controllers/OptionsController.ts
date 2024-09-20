@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import crypto from "crypto"
 import { newCategory, showCategorys, deleteCategoryById, updateCategory, showCategoryById } from "../db/queries/OptionsQueries"
 import { NewCategory, UpdateCategory } from "../types"
 
@@ -8,6 +9,7 @@ export class OptionsController {
         const { name } = req.body
         try {
             const categoryData: NewCategory = {
+                id: crypto.randomUUID(),
                 name,
                 user: id
             }
@@ -34,7 +36,7 @@ export class OptionsController {
         const { id } = req.category
         const { id: userId } = req.user
         try {
-            const categorys = await showCategoryById(userId, +id)
+            const categorys = await showCategoryById(userId, id)
             res.json(categorys)
         } catch (error) {
             res.status(500).json({error: "Hubo un error al buscar la categoría"})
@@ -64,7 +66,7 @@ export class OptionsController {
         const { id } = req.category
         const { id: userId } = req.user
         try {
-            await deleteCategoryById(userId, +id)
+            await deleteCategoryById(userId, id)
             res.send("Categoria eliminada correctamente")
         } catch (error) {
             res.status(500).json({error: "Hubo un error al eliminar la categoría"})
