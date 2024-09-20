@@ -8,28 +8,34 @@ export async function newUser(user: NewUser) {
         .executeTakeFirstOrThrow()
 }
 
-export async function searchUserSelectAll(criteria: Partial<User>): Promise<User|undefined> {
-    let query = db
+export async function searchUserSelectAllbyEmail(email: User["email"]): Promise<User|undefined> {
+    return await db
         .selectFrom("users")
-        .selectAll()
-    if(criteria.id) query.where("id", "=", criteria.id)
-    if(criteria.email) query.where("email", "=", criteria.email)
-    return await query.executeTakeFirst()
+        .select(["id","name","lastname","email","password","confirmed"])
+        .where("email", "=", email)
+        .executeTakeFirst()
 }
 
-export async function searchUser(criteria: Partial<User>): Promise<Pick<User,"id"|"name"|"lastname"|"email"|"confirmed">|undefined> {
-    let query = db
+export async function searchUserById(id: User["id"]): Promise<Pick<User,"id"|"name"|"lastname"|"email"|"confirmed">|undefined> {
+    return await db
         .selectFrom("users")
         .select(["id", "name", "lastname", "email", "confirmed"])
-    if(criteria.id) query.where("id", "=", criteria.id)
-    if(criteria.email) query.where("email", "=", criteria.email)
-    return await query.executeTakeFirst()
+        .where("id", "=", id)
+        .executeTakeFirst()
 }
 
-export async function updateUser(user: UpdateUser) {
+export async function searchUserByEmail(email: User["email"]): Promise<Pick<User,"id"|"name"|"lastname"|"email"|"confirmed">|undefined> {
+    return await db
+        .selectFrom("users")
+        .select(["id", "name", "lastname", "email", "confirmed"])
+        .where("email", "=", email)
+        .executeTakeFirst()
+}
+
+export async function updateUser(id: UpdateUser["id"], update: UpdateUser) {
     return await db
         .updateTable('users')
-        .set(user)
-        .where('id', '=', user.id)
+        .set(update)
+        .where('id', '=', id)
         .executeTakeFirstOrThrow()
 }

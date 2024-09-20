@@ -1,5 +1,5 @@
 import { db } from "../../config/db"
-import { NewToken, Token } from "../../types"
+import { NewToken, Token, User } from "../../types"
 
 export async function newToken(token: NewToken) {
     await db
@@ -16,9 +16,9 @@ export async function searchToken(token: Token["token"]): Promise<Pick<Token,"to
         .executeTakeFirst()
 }
 
-export async function deleteToken(token: Token["token"]) {
+export async function deleteToken(user: User["id"]) {
     return await db
         .deleteFrom('tokens')
-        .where('tokens.token', '=', token)
-        .executeTakeFirstOrThrow()
+        .where('user', '=', user)
+        .execute()
 }
